@@ -12,7 +12,7 @@ BONAI contains 268,958 building instances across 3,300 aerial images with fully 
 
 The images of BONAI are taken from six representative cities of China, i.e., Shanghai, Beijing, Harbin, Jinan, Chengdu, and Xi'an, the detailed number of images and object instances per image set and city are reported in the below table.
 
-![](demo/ataset-details.png)
+![](demo/dataset-details.png)
 
 ## Download
 
