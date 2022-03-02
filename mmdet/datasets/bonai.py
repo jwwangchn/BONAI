@@ -1,24 +1,11 @@
 import os
 import os.path as osp
-import tempfile
-import pandas
-import csv
-import cv2
-
-import mmcv
-import numpy as np
-import pycocotools.mask as maskUtils
-import tqdm
 import math
+import tempfile
+import csv
+import numpy as np
 
-from shapely.validation import explain_validity
-from shapely import affinity
-from shapely.geometry import Polygon, MultiPolygon
 from collections import defaultdict
-from pycocotools.coco import COCO
-import bstool
-
-from mmcv.utils import print_log
 
 from .coco import CocoDataset
 from .builder import DATASETS
@@ -313,86 +300,7 @@ class BONAI(CocoDataset):
        
         return bbox_json_results, segm_json_results
 
-    def evaluate(self,
-                 results,
-                 metric='bbox',
-                 logger=None,
-                 jsonfile_prefix=None,
-                 classwise=False,
-                 proposal_nums=(100, 300, 1000),
-                 iou_thrs=np.arange(0.5, 0.96, 0.05),
-                 detection_eval=True,
-                 segmentation_eval=False,
-                 model_name='',
-                 cities=['xian'],
-                 pred_csv_prefix=None,
-                 gt_footprint_csv_file=None,
-                 with_offset=False,
-                 with_height=False,
-                 save_merged_csv=False):
-        """
-        pred_csv_prefix: PATH/${model}_${city}
-        """
-        if detection_eval:
-            coco_eval_results = super(BONAI, self).evaluate(results,
-                metric=metric,
-                logger=logger,
-                jsonfile_prefix=jsonfile_prefix,
-                classwise=classwise,
-                proposal_nums=proposal_nums,
-                iou_thrs=iou_thrs)
-
-        if segmentation_eval:
-            coco_eval_results = {}
-            import bstool
-
-            csv_info = 'splitted_on_training'
-            summary_file = f'./data/buildchange/summary/{model_name}/{model_name}_xian_public_eval_summary_{csv_info}.csv'
-            bstool.mkdir_or_exist(f'./data/buildchange/summary/{model_name}')
-
-            anno_file = f'./data/buildchange/public/20201028/coco/annotations/buildchange_public_20201028_val_xian_fine.json'
-            gt_roof_csv_file = './data/buildchange/public/20201028/xian_val_roof_crop1024_gt_minarea500.csv'
-            gt_footprint_csv_file = './data/buildchange/public/20201028/xian_val_footprint_crop1024_gt_minarea500.csv'
-
-            bstool.mkdir_or_exist(f'../mmdetv2-bc/results/buildchange/{model_name}')
-
-            roof_csv_file = f'../mmdetv2-bc/results/buildchange/{model_name}/{model_name}_xian_public_roof_{csv_info}.csv'
-            rootprint_csv_file = f'../mmdetv2-bc/results/buildchange/{model_name}/{model_name}_xian_public_footprint_{csv_info}.csv'
-
-            evaluation = bstool.Evaluation(model=model_name,
-                                            anno_file=self.ann_file,
-                                            pkl_file=results,
-                                            gt_roof_csv_file=gt_roof_csv_file,
-                                            gt_footprint_csv_file=gt_footprint_csv_file,
-                                            roof_csv_file=roof_csv_file,
-                                            rootprint_csv_file=rootprint_csv_file,
-                                            iou_threshold=0.1,
-                                            score_threshold=0.4,
-                                            with_offset=with_offset,
-                                            show=False,
-                                            save_merged_csv=False)
-            # try:
-            if evaluation.dump_result:
-                segmentation_eval_results = evaluation.segmentation()
-                meta_info = dict(summary_file=summary_file,
-                                    model=model_name,
-                                    anno_file=anno_file,
-                                    gt_roof_csv_file=gt_roof_csv_file,
-                                    gt_footprint_csv_file=gt_footprint_csv_file,
-                                    vis_dir='')
-                self.write_results2csv([segmentation_eval_results], meta_info)
-                result_dict = {"Roof F1: ": segmentation_eval_results['roof']['F1_score'],
-                                       "Roof Precition: ": segmentation_eval_results['roof']['Precision'],
-                                       "Roof Recall: ": segmentation_eval_results['roof']['Recall'],
-                                       "Footprint F1: ": segmentation_eval_results['footprint']['F1_score'],
-                                       "Footprint Precition: ": segmentation_eval_results['footprint']['Precision'],
-                                       "Footprint Recall: ": segmentation_eval_results['footprint']['Recall']}
-            else:
-                print('!!!!!!!!!!!!!!!!!!!!!! ALl the results of images are empty !!!!!!!!!!!!!!!!!!!!!!!!!!!')
-            # except:
-                # print("Skip the segmentation evaluation")
-
-        return coco_eval_results
+    
 
     def write_results2csv(self, results, meta_info=None):
         print("meta_info: ", meta_info)

@@ -1,5 +1,4 @@
 from .bbox_nms import multiclass_nms
-from .rbbox_nms import multiclass_rnms
 from .merge_augs import (merge_aug_bboxes, merge_aug_masks,
                          merge_aug_proposals, merge_aug_scores)
 
