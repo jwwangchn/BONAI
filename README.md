@@ -25,6 +25,10 @@ You can download the dataset on [Google Driver](https://drive.google.com/drive/f
 ## Evaluation
 Training, Validation and Testing sets are publicly available. The evaluation codes will be upload soon.
 
+## LOFT & FOA
+
+The codes of LOFT and FOA is now publicly available. You can refer to [MMDetection](https://github.com/open-mmlab/mmdetection) to install and run this project.
+
 ## Contact
 
 This repo is currently maintained by Jinwang Wang (jwwangchn@whu.edu.cn).
