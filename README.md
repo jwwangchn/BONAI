@@ -4,7 +4,9 @@ BONAI (**B**uildings in **O**ff-**N**adir **A**erial **I**mages) is a dataset fo
 
 [[Paper]]() [[Dataset]](https://drive.google.com/drive/folders/171PPLyEoIa67ZCuO8GSbnRJWreO-K0ac?usp=sharing)
 
-![](demo/samples-jpg.jpg)
+<div align="center">
+  <img src="resources/samples-jpg.jpg" width="550"/>
+</div>
 
 ## Description
 
@@ -12,7 +14,9 @@ BONAI contains 268,958 building instances across 3,300 aerial images with fully 
 
 The images of BONAI are taken from six representative cities of China, i.e., Shanghai, Beijing, Harbin, Jinan, Chengdu, and Xi'an, the detailed number of images and object instances per image set and city are reported in the below table.
 
-![](demo/dataset-details.png)
+<div align="center">
+  <img src="resources/dataset-details.png" width="400"/>
+</div>
 
 ## Download
 
@@ -20,3 +24,7 @@ You can download the dataset on [Google Driver](https://drive.google.com/drive/f
 
 ## Evaluation
 Training, Validation and Testing sets are publicly available. The evaluation codes will be upload soon.
+
+## Contact
+
+This repo is currently maintained by Jinwang Wang (jwwangchn@whu.edu.cn).
