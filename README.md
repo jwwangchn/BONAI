@@ -5,7 +5,7 @@ BONAI (**B**uildings in **O**ff-**N**adir **A**erial **I**mages) is a dataset fo
 [[Paper]]() [[Dataset]](https://drive.google.com/drive/folders/171PPLyEoIa67ZCuO8GSbnRJWreO-K0ac?usp=sharing)
 
 <div align="center">
-  <img src="resources/samples-jpg.jpg" width="550"/>
+  <img src="resources/samples-jpg.jpg" width="600"/>
 </div>
 
 ## Description
