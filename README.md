@@ -32,3 +32,20 @@ The codes of LOFT and FOA is now publicly available. You can refer to [MMDetecti
 ## Contact
 
 This repo is currently maintained by Jinwang Wang (jwwangchn@whu.edu.cn).
+
+## Citing
+
+If you use BONAI dataset, codebase or models in your research, please consider cite.
+
+```
+@article{wang2022bonai,
+  author={Wang, Jinwang and Meng, Lingxuan and Li, Weijia and Yang, Wen and Yu, Lei and Xia, Gui-Song},
+  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence}, 
+  title={Learning to Extract Building Footprints from Off-Nadir Aerial Images}, 
+  year={2022},
+  volume={},
+  number={},
+  pages={1-1},
+  doi={10.1109/TPAMI.2022.3162583}}
+```
+
