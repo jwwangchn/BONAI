@@ -3,7 +3,6 @@ import mmcv
 import torch
 import cv2
 import math
-import bstool
 
 from ..builder import DETECTORS
 from .two_stage import TwoStageDetector
@@ -107,74 +106,6 @@ class LOFT(TwoStageDetector):
                 offset_results.append(offset)
                 bbox_results.append(bbox)
                 offset_feats.append(offset_feat)
-
-        self._vis_channel_feat(img, bbox_results, masks, offset_feats, offset_results, out_file)
-
-        if False:
-            img = bstool.draw_masks_boundary(img, masks, color=(0, 0, 255))
-            roof_polygons = [bstool.mask2polygon(mask) for mask in masks]
-            footprint_polygons = [bstool.roof2footprint_single(roof_polygon, offset_result, offset_model='footprint2roof') for roof_polygon, offset_result in zip(roof_polygons, offset_results)]
-            footprint_masks = [bstool.polygon2mask(footprint_polygon) for footprint_polygon in footprint_polygons]
-
-            img = bstool.draw_masks_boundary(img, footprint_masks, color=(255, 0, 0))
-
-        if False:
-            self._show_offset_feat(bbox_results, offset_feats, output_file=bstool.get_basename(out_file) + '_featuremap_mean.png')
-
-        print("out_file: ", out_file)
-        # bstool.show_image(img, win_name='show', output_file=out_file)
-
-    def _save_offset_feat(self, bboxes, offset_feats, output_file=None):
-        pass
-
-    def _vis_channel_feat(self, img, bbox_results, masks, offset_feats, offset_results, out_file):
-        angle = float(out_file.split('.png')[0].split('_R')[1])
-        out_file = out_file.replace('masks', 'offset_features').split('.png')[0]
-        rotated_bbox = bstool.bboxes_rotate(self.anchor_bbox_vis, [1024, 1024, 3], angle * np.pi / 180)
-        ious = bstool.iou(rotated_bbox, np.array(bbox_results))
-        index = np.argmax(ious)
-
-        vis_mask = masks[index]
-        vis_bbox = bbox_results[index]
-        vis_offset_feat = offset_feats[index].cpu().detach().numpy()
-        np.save(out_file, vis_offset_feat)
-
-        # img = bstool.draw_mask_boundary(img, vis_mask, color=(0, 0, 255))
-        # bstool.show_bboxs_on_image(img, vis_bbox, win_name='show')
-        # bstool.show_image(img, win_name='show')
-        
-    def _show_offset_feat(self, bboxes, offset_feats, output_file=None):
-        background = np.full((1024, 1024), 0, dtype=np.uint8)
-        bbox_num = len(bboxes)
-        for idx in range(bbox_num):
-            bbox = bboxes[idx]
-            featuremap = offset_feats[idx].cpu().detach().numpy()
-            # featuremap = torch.max(featuremap, dim=0)
-            featuremap = np.mean(featuremap, axis=0)
-            
-            min_num = np.percentile(featuremap, 5)
-            max_num = np.percentile(featuremap, 95)
-            featuremap = bstool.rescale(featuremap, min_num, max_num)
-            
-            bbox = np.clip(bbox, 0, 1024-1)
-            xmin, ymin, xmax, ymax = [int(_) for _ in bbox]
-            bbox_w, bbox_h = xmax - xmin, ymax - ymin
-
-            # if np.sqrt(bbox_w * bbox_h) < 50:
-            #     continue
-
-            featuremap = featuremap.astype(np.float64)
-            max_value = np.max(featuremap)
-            min_value = np.min(featuremap)
-            featuremap = 255 * (featuremap - min_value) / (max_value - min_value)
-            featuremap = featuremap.astype(np.uint8)  
-            featuremap = cv2.resize(featuremap, (int(bbox_w + 1), int(bbox_h + 1)))
-            background[ymin:ymax+1, xmin:xmax+1] += featuremap
-
-        featuremap = bstool.show_grayscale_as_heatmap(background, win_name='featuremap', return_img=True)
-
-        if output_file is not None:
-            cv2.imwrite(output_file, featuremap)
 
     def offset_coordinate_transform(self, offset, transform_flag='xy2la'):
         """transform the coordinate of offsets

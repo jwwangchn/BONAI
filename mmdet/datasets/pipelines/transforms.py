@@ -15,8 +15,6 @@ try:
 except ImportError:
     corrupt = None
 
-import bstool
-
 try:
     import albumentations
     from albumentations import Compose
@@ -2130,54 +2128,3 @@ class OffsetTransform(object):
     def __repr__(self):
         return self.__class__.__name__ + '(offset_coordinate={})'.format(
             self.offset_coordinate)
-
-@PIPELINES.register_module
-class Show(object):
-    """convert pointobb to corresponding regression-based obbs
-    """
-    def __init__(self, item=None):
-        pass
-
-    def _show(self, img, bbox, mask, offset, color=(0, 0, 255)):
-        """show single theteobb
-
-        Args:
-            im (np.array): input image
-            thetaobb (list): [cx, cy, w, h, theta]
-            color (tuple, optional): draw color. Defaults to (0, 0, 255).
-
-        Returns:
-            np.array: image with thetaobb
-        """
-        objects = bstool.mask_parse(mask, subclasses=(1, 1))
-        if len(objects) < 1:
-            return img
-        roof_polygon = objects[0]['polygon']
-        roof_mask = bstool.polygon2mask(roof_polygon)
-        bbox = bstool.xyxy2xywh(bbox)
-        # img = bstool.show_bbox(img, bbox, color=(0, 255, 0))
-
-        footprint_mask = bstool.polygon2mask(bstool.roof2footprint_single(roof_polygon, offset, offset_model='footprint2roof'))
-        img = bstool.draw_mask_boundary(img, roof_mask, color=(0, 0, 255))
-        img = bstool.draw_mask_boundary(img, footprint_mask, color=(255, 0, 0))
-
-        return img
-
-    def __call__(self, results):
-        img = results['img']
-        print(results['img'].shape)
-        offsets = results['gt_offsets']
-        bboxes = results['gt_bboxes']
-        masks = results['gt_masks']
-
-        print("rotation angle: ", results['rotate_angle'])
-        print(f"flip direction: {results['flip_direction']}, flip: {results['flip']}")
-        for bbox, mask, offset in zip(bboxes, masks, offsets):
-            img = self._show(img.astype(np.uint8), bbox, mask, offset)
-        
-        mmcv.imshow(img)
-        return results
-
-    def __repr__(self):
-        repr_str = self.__class__.__name__
-        return repr_str

@@ -193,41 +193,6 @@ class LoftRoIHead(StandardRoIHead, OffsetTestMixin):
         mask_results.update(loss_mask=loss_mask, mask_targets=mask_targets)
         return mask_results
 
-    def _show_offset_feat(self, rois, offset_feats):
-        import bstool
-        import cv2
-
-        background = np.full((1024, 1024), 0, dtype=np.uint8)
-        bboxes = roi2bbox(rois)[0]
-        bbox_num = bboxes.shape[0]
-        for idx in range(bbox_num):
-            bbox = bboxes[idx, :]
-            featuremap = offset_feats[idx, :].cpu()
-            featuremap = torch.mean(featuremap, dim=0)
-            featuremap = featuremap.detach()
-            featuremap = featuremap.numpy()
-            min_num = np.percentile(featuremap, 5)
-            max_num = np.percentile(featuremap, 95)
-            featuremap = bstool.rescale(featuremap, min_num, max_num)
-            
-            bbox = np.clip(bbox.cpu().numpy(), 0, 1024-1)
-            xmin, ymin, xmax, ymax = [int(_) for _ in bbox]
-            bbox_w, bbox_h = xmax - xmin, ymax - ymin
-
-            if np.sqrt(bbox_w * bbox_h) < 50:
-                continue
-
-            featuremap = featuremap.astype(np.float64)
-            max_value = np.max(featuremap)
-            min_value = np.min(featuremap)
-            featuremap = 255 * (featuremap - min_value) / (max_value - min_value)
-            featuremap = featuremap.astype(np.uint8)  
-            featuremap = cv2.resize(featuremap, (int(bbox_w + 1), int(bbox_h + 1)))
-            background[ymin:ymax+1, xmin:xmax+1] += featuremap
-
-        bstool.show_grayscale_as_heatmap(background)
-        
-
     def simple_test(self,
                     x,
                     proposal_list,

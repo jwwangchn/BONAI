@@ -18,7 +18,6 @@ from .retina_head import RetinaHead
 from .retina_sepbn_head import RetinaSepBNHead
 from .rpn_head import RPNHead
 from .ssd_head import SSDHead
-from .rretinanet_head import RRetinaHead
 from .semi_rpn_head import SemiRPNHead
 
 __all__ = [
@@ -26,5 +25,5 @@ __all__ = [
     'RPNHead', 'GARPNHead', 'RetinaHead', 'RetinaSepBNHead', 'GARetinaHead',
     'SSDHead', 'FCOSHead', 'RepPointsHead', 'FoveaHead',
     'FreeAnchorRetinaHead', 'ATSSHead', 'FSAFHead', 'NASFCOSHead',
-    'PISARetinaHead', 'PISASSDHead', 'GFLHead', 'CornerHead', 'RRetinaHead', 'SemiRPNHead'
+    'PISARetinaHead', 'PISASSDHead', 'GFLHead', 'CornerHead', 'SemiRPNHead'
 ]
