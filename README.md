@@ -1,6 +1,6 @@
 # BONAI
 
-BONAI (**B**uildings in **O**ff-**N**adir **A**erial **I**mages) is a dataset for building footprint extraction (BFE) in off-nadir aerial images.
+This is the official code for the [BONAI](https://arxiv.org/abs/2204.13637) (TPAMI 2022). BONAI (**B**uildings in **O**ff-**N**adir **A**erial **I**mages) is a dataset for building footprint extraction (BFE) in off-nadir aerial images.
 
 [[Paper]](https://arxiv.org/abs/2204.13637) [[Dataset]](https://drive.google.com/drive/folders/171PPLyEoIa67ZCuO8GSbnRJWreO-K0ac?usp=sharing)
 
