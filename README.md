@@ -23,7 +23,13 @@ The images of BONAI are taken from six representative cities of China, i.e., Sha
 You can download the dataset on [Google Driver](https://drive.google.com/drive/folders/171PPLyEoIa67ZCuO8GSbnRJWreO-K0ac?usp=sharing).
 
 ## Evaluation
-Training, Validation and Testing sets are publicly available. The evaluation codes will be upload soon.
+Training, Validation and Testing sets are publicly available. The evaluation code has been updated in [bonai_evaluation.py](tools/bonai/bonai_evaluation.py). You can evaluate the model by:
+
+```
+python tools/bonai/bonai_evaluation.py --version bc_v100.02.08 --model bc_v100.02.08_offset_rcnn_r50_2x_public_20201028_rotate_offset_4_angles_without_image_rotation --city shanghai_xian_public
+```
+
+Note: Installing the [bstool](https://github.com/jwwangchn/bstool) code library is required to run the evaluation code.
 
 ## LOFT & FOA
 
