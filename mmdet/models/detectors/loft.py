@@ -3,6 +3,7 @@ import mmcv
 import torch
 import cv2
 import math
+import os
 
 from ..builder import DETECTORS
 from .two_stage import TwoStageDetector
@@ -29,7 +30,8 @@ class LOFT(TwoStageDetector):
             pretrained=pretrained)
 
         self.anchor_bbox_vis = [[287, 433, 441, 541]]
-        self.with_vis_feat = True
+        #self.with_vis_feat = True
+        self.with_vis_feat = False
 
     def show_result(self,
                     img,
@@ -96,7 +98,9 @@ class LOFT(TwoStageDetector):
                 contours = cv2.findContours(gray.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
                 contours = contours[0] if len(contours) == 2 else contours[1]
                 
-                if contours != []:
+                #if contours != []:
+                if len(contours) != 0:
+                    #print("len(contours) = ", len(contours))
                     cnt = max(contours, key = cv2.contourArea)
                     mask = np.array(cnt).reshape(1, -1).tolist()[0]
                 else:
@@ -106,6 +110,54 @@ class LOFT(TwoStageDetector):
                 offset_results.append(offset)
                 bbox_results.append(bbox)
                 offset_feats.append(offset_feat)
+        #show image
+        # if out_file specified, do not show image in window
+        show = True
+        if out_file is not None:
+            show = False
+        # draw mask
+        img_draw = img
+        for mask in masks:
+            p = 0
+            pmax = len(mask)
+            counter=0
+            height, width = img.shape[:2]
+            while p < pmax-3:
+                x1=mask[p]
+                y1=mask[p+1]
+                x2=mask[p+2]
+                y2=mask[p+3]
+                line_thickness = 2
+                #draw roof
+                cv2.line(img_draw, (x1, y1), (x2, y2), (255, 0, 0), thickness=line_thickness)
+                #draw bottom
+                if(counter < len(offset_results)):
+                    deltaX=offset_results[counter][0]
+                    deltaY=offset_results[counter][1]
+                    newX1=math.ceil(x1-deltaX)
+                    newY1=math.ceil(y1-deltaY)
+                    newX2=math.ceil(x2-deltaX)
+                    newY2=math.ceil(y2-deltaY)
+                    #print(newX1," ",newY1," ",newX2," ",newY2)
+                    cv2.line(img_draw, (newX1, newY1), (newX2, newY2), (0, 0, 255), thickness=line_thickness)
+                p=p+2
+            counter=counter+1
+        
+        current_working_directory = os.getcwd()
+        filenames=out_file.split(".")
+        out_file_nobox=current_working_directory+filenames[1]+"_nobox."+filenames[2]
+        print("saving nobox image to ",out_file_nobox)
+        mmcv.imwrite(img_draw, out_file_nobox)
+        # draw bounding boxes
+        bboxes = np.vstack(bbox_result)
+        bboxes = bboxes[:, 0:-1]
+        mmcv.imshow_bboxes(
+            img_draw,
+            bboxes,
+            colors='green',
+            show=show,
+            wait_time=wait_time,
+            out_file=out_file)
 
     def offset_coordinate_transform(self, offset, transform_flag='xy2la'):
         """transform the coordinate of offsets
