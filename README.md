@@ -2,7 +2,7 @@
 
 This is the official code for the [BONAI](https://arxiv.org/abs/2204.13637) (TPAMI 2022). BONAI (**B**uildings in **O**ff-**N**adir **A**erial **I**mages) is a dataset for building footprint extraction (BFE) in off-nadir aerial images.
 
-[[Paper]](https://arxiv.org/abs/2204.13637) [[Dataset]](https://drive.google.com/drive/folders/171PPLyEoIa67ZCuO8GSbnRJWreO-K0ac?usp=sharing)
+[[Paper]](https://arxiv.org/abs/2204.13637) [[Dataset]](https://drive.google.com/drive/folders/171PPLyEoIa67ZCuO8GSbnRJWreO-K0ac?usp=sharing) [[Hugging Face]](https://huggingface.co/datasets/jwwangchn/BONAI)
 
 <div align="center">
   <img src="resources/samples-jpg.jpg" width="600"/>
@@ -21,6 +21,8 @@ The images of BONAI are taken from six representative cities of China, i.e., Sha
 ## Download
 
 You can download the dataset on [Google Driver](https://drive.google.com/drive/folders/171PPLyEoIa67ZCuO8GSbnRJWreO-K0ac?usp=sharing).
+
+The dataset is also available on 🤗 Hugging Face: https://huggingface.co/datasets/jwwangchn/BONAI — including trainval.zip, test.zip, COCO-format annotations and WKT files. This mirror may be more convenient for users who have trouble accessing Google Drive.
 
 ## Evaluation
 Training, Validation and Testing sets are publicly available. The evaluation code has been updated in [bonai_evaluation.py](tools/bonai/bonai_evaluation.py). You can evaluate the model by:
