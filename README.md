@@ -24,6 +24,11 @@ You can download the dataset on [Google Driver](https://drive.google.com/drive/f
 
 The dataset is also available on 🤗 Hugging Face: https://huggingface.co/datasets/jwwangchn/BONAI — including trainval.zip, test.zip, COCO-format annotations and WKT files. This mirror may be more convenient for users who have trouble accessing Google Drive.
 
+## Pretrained Models
+
+The pretrained LOFT checkpoint (BONAI-LOFT-ROA-F1Score-64.31.pth, F1 score 64.31) is available on 🤗 Hugging Face: https://huggingface.co/jwwangchn/BONAI
+
+
 ## Evaluation
 Training, Validation and Testing sets are publicly available. The evaluation code has been updated in [bonai_evaluation.py](tools/bonai/bonai_evaluation.py). You can evaluate the model by:
 
